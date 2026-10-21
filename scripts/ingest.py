@@ -47,3 +47,22 @@ def load_data_to_csv(csv_path: str, table_name: str) -> int:
 
     client.insert_df(df=df, table=table_name, database=ch_config.database)
     return len(df)
+
+
+def main():
+    data_dir = Path("data/raw/synthea")
+    csv_files = sorted(data_dir.glob("*.csv"))
+    logger.info("Found %d CSV files in %s", len(csv_files), data_dir)
+
+    for csv_path in csv_files:
+        table_name = f"raw_{csv_path.stem}"
+        try:
+            create_table_from_csv(str(csv_path), table_name)
+            rows = load_data_to_csv(str(csv_path), table_name)
+            logger.info("%s -> %d rows", csv_path.name, rows)
+        except Exception:
+            logger.exception("Failed on %s", csv_path.name)
+
+
+if __name__ == "__main__":
+    main()
