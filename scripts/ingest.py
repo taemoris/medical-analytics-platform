@@ -45,6 +45,7 @@ def load_data_to_csv(csv_path: str, table_name: str) -> int:
     df["_loaded_at"] = pd.Timestamp.now()
     df["_source_file"] = Path(csv_path).name
 
+    client.command(f"TRUNCATE TABLE IF EXISTS ehr.{table_name}")
     client.insert_df(df=df, table=table_name, database=ch_config.database)
     return len(df)
 
