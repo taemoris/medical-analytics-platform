@@ -1,4 +1,4 @@
-CREATE TABLE ehr.raw_encounters (
+CREATE TABLE ehr.raw_encounters IF NOT EXISTS (
     Id String,
     START String,
     STOP String,
