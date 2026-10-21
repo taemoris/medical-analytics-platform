@@ -1,7 +1,14 @@
+import logging
+from pathlib import Path
+
 import clickhouse_connect
 import pandas as pd
 from settings import ch_config
-from pathlib import Path
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 client = clickhouse_connect.get_client(
     host=ch_config.host,
