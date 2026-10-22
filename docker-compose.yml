@@ -21,7 +21,26 @@ services:
       nofile:
         soft: 262144
         hard: 262144
+    networks:
+      - ehr-network
+    restart: "unless-stopped"
+  spark:
+    image: apache/spark:3.5.9-python3
+    container_name: ehr-spark
+    entrypoint: ["/bin/bash", "-c", "tail -f /dev/null"]
+    environment:
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_DB: ${CLICKHOUSE_DB}
+    volumes:
+      - ./scripts:/opt/spark/scripts
+    networks:
+      - ehr-network
     restart: "unless-stopped"
 
 volumes:
   clickhouse_data:
+
+networks:
+  ehr-network:
+    driver: bridge
