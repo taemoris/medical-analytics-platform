@@ -29,17 +29,38 @@ services:
     container_name: ehr-spark
     entrypoint: ["/bin/bash", "-c", "tail -f /dev/null"]
     environment:
+      CLICKHOUSE_HOST: clickhouse
+      CLICKHOUSE_PORT: 8123
       CLICKHOUSE_USER: ${CLICKHOUSE_USER}
       CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
       CLICKHOUSE_DB: ${CLICKHOUSE_DB}
+      
     volumes:
       - ./scripts:/opt/spark/scripts
+      - ./sql:/opt/spark/sql
     networks:
       - ehr-network
     restart: "unless-stopped"
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: ehr-grafana
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECUTIRY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_INSTALL_PLUGINS: vertamedia-clickhouse-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - ehr-network
+    restart:
+      "unless-stopped"
+
 
 volumes:
   clickhouse_data:
+  grafana_data:
 
 networks:
   ehr-network:
