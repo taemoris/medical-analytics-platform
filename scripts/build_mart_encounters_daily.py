@@ -1,7 +1,7 @@
 import os
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, to_date, count, unix_timestamp, avg, sum, round
+from pyspark.sql.functions import avg, col, count, round, sum, to_date, unix_timestamp
 from pyspark.sql.types import DecimalType
 
 spark = SparkSession.builder.appName("build_mart_encounters_daily").getOrCreate()
