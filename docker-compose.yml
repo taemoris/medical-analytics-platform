@@ -32,24 +32,23 @@ services:
     container_name: ehr-spark
     ports:
       - "127.0.0.1:8888:8888" 
-    entrypoint: ["/bin/bash", "-c", "tail -f /dev/null"]
     environment:
       CLICKHOUSE_HOST: clickhouse
       CLICKHOUSE_PORT: 8123
       CLICKHOUSE_USER: ${CLICKHOUSE_USER}
       CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
       CLICKHOUSE_DB: ${CLICKHOUSE_DB}
-    command: >
-      jupyter lab 
-      --ip=0.0.0.0 
-      --port=8888 
-      --no-browser 
-      --ServerApp.token='' 
-      --ServerApp.password='' 
-      --ServerApp.allow_origin='*' 
-      --notebook-dir=/opt/spark
+    command:
+      - jupyter
+      - lab
+      - --ip=0.0.0.0
+      - --port=8888
+      - --no-browser
+      - --ServerApp.token=
+      - --ServerApp.password=
+      - --ServerApp.allow_origin=*
+      - --notebook-dir=/opt/spark
     volumes:
-      - spark_ivy_cache:/home/spark/.ivy2
       - ./scripts:/opt/spark/scripts
       - ./sql:/opt/spark/sql
       - ./notebooks/:/opt/spark/notebooks
@@ -76,6 +75,7 @@ services:
 volumes:
   clickhouse_data:
   grafana_data:
+  spark_ivy_cache:
 
 networks:
   ehr-network:
